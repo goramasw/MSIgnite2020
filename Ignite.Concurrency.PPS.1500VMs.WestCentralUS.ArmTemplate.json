@@ -1,0 +1,244 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageType": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Enter the type of the storage account to provision."
+      }
+    },
+    "Description": {
+      "type": "string",
+      "metadata": {
+        "description": "The number of VMs to deploy"
+      },
+      "defaultValue": ""
+    },
+    "StaticResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "The static resource group with a precreated VNET & NSG"
+      },
+      "defaultValue": ""
+    },
+    "StaticNSG": {
+      "type": "string",
+      "metadata": {
+        "description": "The static NSG for Concurrency"
+      },
+      "defaultValue": ""
+    },
+    "StaticVNET": {
+      "type": "string",
+      "metadata": {
+        "description": "The static VNET for Concurrency"
+      },
+      "defaultValue": ""
+    },
+    "StaticSubnet": {
+      "type": "string",
+      "metadata": {
+        "description": "The static Subnet for Concurrency"
+      },
+      "defaultValue": ""
+    },  
+    "NumberOfVMs": {
+      "type": "string",
+      "metadata": {
+        "description": "Number of VMs"
+      },
+      "defaultValue": "1"
+    },
+    "ImageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+      "description": "The image id"
+      }
+    },
+    "imagePublisher": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Select the publisher for the image you want to use."
+      }
+    },
+    "imageOffer": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Select the image offer for the image you want to use"
+      }
+    },
+    "imageSku": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The image version for the VM. This will pick a fully patched image of this given imagePublisher and imageOffer."
+      }
+    },
+    "imageVersion": {
+      "type": "string",
+      "defaultValue": "latest",
+      "metadata": {
+        "description": "Version of the image we are using"
+      }
+    },
+    "vmSize": {
+      "defaultValue": "Standard_DS1_v2",
+      "type": "string"
+    },
+    "adminUsername": {
+      "defaultValue": "azureuser",
+      "type": "string"
+    },
+    "adminPassword": {
+      "defaultValue": "",
+      "type": "string"
+    },
+    "sshPublicKey": {
+      "defaultValue": "",
+      "type": "string"
+    },
+    "vmName": {
+      "type": "string",
+      "metadata": {
+        "description": "VM name"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "VM location (i.e., West US, East US, East US 2, ...)"
+      }
+    },
+    "resourceGroupName": {
+      "type": "string",
+      "defaultValue": "parameters('vmName')",
+      "metadata": {
+        "description": "Resource Group name"
+      }
+    },
+    "nicName": {
+      "type": "string",
+      "defaultValue": "myVMNic",
+      "metadata": {
+        "description": "Name of the parameterized NIC name"
+      }
+    }
+  },
+  "variables": {
+    "computeApiVersion": "2018-06-01",
+    "apiVersion": "2017-03-01",
+    "NSG": "[resourceId(parameters('StaticResourceGroup'), 'Microsoft.Network/networkSecurityGroups',parameters('StaticNSG'))]",
+    "vnetID": "[resourceId(parameters('StaticResourceGroup'), 'Microsoft.Network/virtualNetworks',parameters('StaticVNET'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('StaticSubnet'))]"
+  },
+  "resources": [
+    {
+      "comments": "NIC resource",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat('sfc_nic_', parameters('vmName'), '_', copyindex())]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "sfc_vm_group_id": "[concat(parameters('vmName'), '_', copyindex())]"
+      },
+      "copy": {
+        "name": "nicloop",
+        "count": "[int(parameters('NumberOfVMs'))]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "primary",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ],
+//        "networkSecurityGroup": {
+//          "id": "[variables('NSG')]"
+//        },
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableIPForwarding": false,
+        "enableAcceleratedNetworking": false
+      }
+    },
+    {
+      "comments": "VM creation",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('vmName'), '_', copyindex())]",
+      "apiVersion": "[variables('computeApiVersion')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "sfc_vm_group_id": "[concat(parameters('vmName'), '_', copyindex())]",
+        //"CirrusCreated": "[parameters('cirrusCreationTime')]",
+        //"CirrusRun": "[parameters('cirrusRunId')]"
+      },
+      "copy": {
+        "name": "vmloop",
+        "count": "[int(parameters('NumberOfVMs'))]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSku')]",
+            "version": "[parameters('imageVersion')]"
+          },
+          "osDisk": {
+            "osType": "Linux",
+            "name": "[concat('osdisk', parameters('vmName'), '_', copyindex())]",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "diskSizeGB": "77",
+            "managedDisk": {
+              "storageAccountType": "[parameters('storageType')]"
+            }
+          },
+          "dataDisks": []
+        },
+        "osProfile": {
+          "computerName": "[concat('sfcvm-', replace(parameters('vmName'),'_','-'), '-', copyindex())]",
+          "adminUsername": "[parameters('adminUserName')]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
+                  "keyData": "[parameters('sshPublicKey')]"
+                }
+              ]
+            }
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat('sfc_nic_', parameters('vmName'), '_', copyindex()))]",
+              "properties": {
+                "primary": true
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', 'sfc_nic_', parameters('vmName'), '_', copyindex())]"
+      ]
+    }
+  ]
+}
