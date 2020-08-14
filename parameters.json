@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "southcentralus"
+            "value": "West US"
         },
         "numberOfInstances": {
             "value": "125"
