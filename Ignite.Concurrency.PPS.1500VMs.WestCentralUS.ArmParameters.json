@@ -9,16 +9,16 @@
       "value": "Ignite2020_1500VM_WestCentralUS"
     },
     "StaticResourceGroup": {
-      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.USNorth.RG"
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG"
     },
     "StaticNSG": {
-      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.USNorth.RG.NSG"
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG.NSG"
     },
     "StaticVNET": {
-      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.USNorth.RG.VNET"
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG.VNET"
     },
     "StaticSubnet": {
-      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.USNorth.RG.VNET.Subnet"
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG.VNET.Subnet"
     },
     "NumberOfVMs": {
       "value": "125"
