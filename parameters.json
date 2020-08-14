@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "west central us"
+            "value": "westcentralus"
         },
         "numberOfInstances": {
             "value": 125
