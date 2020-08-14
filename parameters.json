@@ -80,7 +80,7 @@
             "value": "goramasw"
         },
         "adminPassword": {
-            "value": null
+            "value": "IgniteTest$1234"
         }
     }
 }
