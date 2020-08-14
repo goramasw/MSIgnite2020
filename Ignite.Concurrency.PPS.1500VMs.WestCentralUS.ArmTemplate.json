@@ -180,6 +180,7 @@
       "location": "[resourceGroup().location]",
       "tags": {
         "sfc_vm_group_id": "[concat(parameters('vmName'), '_', copyindex())]",
+	 "PreprovisionedVMEscrowViaAZSM": "true"
         //"CirrusCreated": "[parameters('cirrusCreationTime')]",
         //"CirrusRun": "[parameters('cirrusRunId')]"
       },
