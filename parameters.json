@@ -6,7 +6,7 @@
             "value": "West US"
         },
         "numberOfInstances": {
-            "value": "125"
+            "value": 125
         },
         "networkInterfaceName": {
             "value": "msignite2020210"
