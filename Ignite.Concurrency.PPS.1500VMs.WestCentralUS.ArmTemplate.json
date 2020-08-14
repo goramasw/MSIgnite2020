@@ -199,11 +199,10 @@
             "version": "[parameters('imageVersion')]"
           },
           "osDisk": {
-            "osType": "Linux",
+            "osType": "Windows",
             "name": "[concat('osdisk', parameters('vmName'), '_', copyindex())]",
             "createOption": "FromImage",
             "caching": "ReadWrite",
-            "diskSizeGB": "77",
             "managedDisk": {
               "storageAccountType": "[parameters('storageType')]"
             }
@@ -211,19 +210,13 @@
           "dataDisks": []
         },
         "osProfile": {
-          "computerName": "[concat('sfcvm-', replace(parameters('vmName'),'_','-'), '-', copyindex())]",
-          "adminUsername": "[parameters('adminUserName')]",
-          "linuxConfiguration": {
-            "disablePasswordAuthentication": true,
-            "ssh": {
-              "publicKeys": [
-                {
-                  "path": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
-                  "keyData": "[parameters('sshPublicKey')]"
-                }
-              ]
-            }
-          }
+			"computerName": "[concat('sfcvm-', replace(parameters('vmName'),'_','-'), '-', copyindex())]",
+			"adminUsername": "[parameters('adminUsername')]",
+			"adminPassword": "[parameters('adminPassword')]",
+			"windowsConfiguration": {
+				"enableAutomaticUpdates": true,
+				"provisionVmAgent": true
+			}
         },
         "networkProfile": {
           "networkInterfaces": [
