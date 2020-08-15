@@ -21,7 +21,7 @@
       "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG.VNET.Subnet"
     },
     "NumberOfVMs": {
-      "value": "125"
+      "value": "1500"
     },
     "imagePublisher": {
       "value": "MicrosoftWindowsServer"
