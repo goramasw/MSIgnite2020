@@ -175,11 +175,11 @@
     {
       "comments": "VM creation",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('vmName'), '_', copyindex())]",
+      "name": "[concat(parameters('vmName'), '-', copyindex())]",
       "apiVersion": "[variables('computeApiVersion')]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "sfc_vm_group_id": "[concat(parameters('vmName'), '_', copyindex())]",
+        "sfc_vm_group_id": "[concat(parameters('vmName'), '-', copyindex())]",
 	 "PreprovisionedVMEscrowViaAZSM": "true"
         //"CirrusCreated": "[parameters('cirrusCreationTime')]",
         //"CirrusRun": "[parameters('cirrusRunId')]"
@@ -201,7 +201,7 @@
           },
           "osDisk": {
             "osType": "Windows",
-            "name": "[concat('osdisk', parameters('vmName'), '_', copyindex())]",
+            "name": "[concat('osdisk', parameters('vmName'), '-', copyindex())]",
             "createOption": "FromImage",
             "caching": "ReadWrite",
             "managedDisk": {
@@ -211,7 +211,7 @@
           "dataDisks": []
         },
         "osProfile": {
-			"computerName": "[concat('sfcvm-', replace(parameters('vmName'),'_','-'), '-', copyindex())]",
+			"computerName": "[concat('sfcvm-', replace(parameters('vmName'),'-','-'), '-', copyindex())]",
 			"adminUsername": "[parameters('adminUsername')]",
 			"adminPassword": "[parameters('adminPassword')]",
 			"windowsConfiguration": {
