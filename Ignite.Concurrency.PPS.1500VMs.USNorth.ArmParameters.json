@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageType": {
+      "value": ""
+    },
+    "Description": {
+      "value": "Ignite2020_1500VM_NorthCentralUS"
+    },
+    "StaticResourceGroup": {
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG"
+    },
+    "StaticNSG": {
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG.NSG"
+    },
+    "StaticVNET": {
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG.VNET"
+    },
+    "StaticSubnet": {
+      "value": "Ignite2020.Concurrency.1500VMs.AzSM.PPS.125x12.RG.VNET.Subnet"
+    },
+    "NumberOfVMs": {
+      "value": "125"
+    },
+    "imagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "imageOffer": {
+      "value": "WindowsServer"
+    },
+    "location": {
+      "value": "NorthCentralUS"
+    },
+    "imageSku": {
+      "value": "2019-Datacenter"
+    },
+    "imageVersion": {
+      "value": "latest"
+    },
+    "vmSize": {
+      "value": "Standard_DS1_v2"
+    },
+	"storageType": {
+      "value": "Premium_LRS"
+    },
+    "adminUsername": {
+      "value": "goramasw"
+    },
+    "adminPassword": {
+      "value": "Ignite2020@1234"
+    },
+    "sshPublicKey": {
+      "value": ""
+    },
+    "vmName": {
+      "value": "Ig"
+    }
+  }
+}
